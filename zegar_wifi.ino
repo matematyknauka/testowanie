@@ -17,6 +17,7 @@ unsigned long t = 0;
 
 
 void setup() {
+    set_up();
     
     WiFi.begin(ssid, password);
   
