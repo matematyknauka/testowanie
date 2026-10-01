@@ -20,7 +20,7 @@ unsigned long t = 0;
 #define I2S_DOUT      25
 #define I2S_BCLK      27
 #define I2S_LRC       26
-int VOLUME = 7;
+int VOLUME = 21;
 String ADDRESS = "http://62.133.128.18:8040/listen.pls";
 Audio audio;
 void audio_info(const char* info) {
@@ -84,8 +84,6 @@ void setup() {
       audio.connecttohost(ADDRESS.c_str());
     }
 
-   
-
     // Budujemy stronę HTML z aktualną wartością i formularzem
     String html = "<h1>Glosnosc: " + String(VOLUME) + "</h1>";
     html += "<form action='/' method='GET'>";
@@ -100,7 +98,7 @@ void setup() {
 
   audio.setPinout(I2S_BCLK, I2S_LRC, I2S_DOUT);
   audio.setVolume(VOLUME); // default 0...21
-  // audio.connecttohost(ADDRESS.c_str());
+  audio.connecttohost(ADDRESS.c_str());
     
     
 }
@@ -119,11 +117,6 @@ void loop() {
     sprintf(buffer, "%02d:%02d", t/60000UL/60UL, t/60000UL - t/60000UL/60UL * 60);
     printLCD(buffer);
   }
-
- if (server.hasArg("godzina") && server.hasArg("minuta") && server.arg("godzina") == t/60000UL/60UL && server.arg("minuta") == t/60000UL - t/60000UL/60UL * 60) {
-      ADDRESS = "http://62.133.128.18:8040/listen.pls";
-      audio.connecttohost(ADDRESS.c_str());
-    }
     
   // Obsługa przychodzących połączeń
   server.handleClient();
