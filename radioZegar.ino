@@ -88,8 +88,8 @@ void setup() {
     }
 
    if (server.hasArg("godz_budz") && server.hasArg("min_budz")) {
-      godz_budz = server.arg("godz_budz").toULong(); // Zapamiętujemy nową wartość
-      min_budz = server.arg("min_budz").toULong(); // Zapamiętujemy nową wartość
+      godz_budz = (unsigned long)server.arg("godz_budz").toInt();
+      min_budz = (unsigned long)server.arg("min_budz").toInt();
       budzik = true;
     }
 
