@@ -16,6 +16,9 @@ unsigned long t_min_poln = 0;
 unsigned long godz = 0;
 unsigned long minuta = 0;
 unsigned long t = 0;
+unsigned long min_budz = 0;
+unsigned long godz_budz = 0;
+bool budzik = false;
  
 #define I2S_DOUT      25
 #define I2S_BCLK      27
@@ -84,6 +87,12 @@ void setup() {
       audio.connecttohost(ADDRESS.c_str());
     }
 
+   if (server.hasArg("godz_budz") && server.hasArg("min_budz")) {
+      godz_budz = server.arg("godz_budz").toULong(); // Zapamiętujemy nową wartość
+      min_budz = server.arg("min_budz").toULong(); // Zapamiętujemy nową wartość
+      budzik = true;
+    }
+
     // Budujemy stronę HTML z aktualną wartością i formularzem
     String html = "<h1>Glosnosc: " + String(VOLUME) + "</h1>";
     html += "<form action='/' method='GET'>";
@@ -98,7 +107,7 @@ void setup() {
 
   audio.setPinout(I2S_BCLK, I2S_LRC, I2S_DOUT);
   audio.setVolume(VOLUME); // default 0...21
-  audio.connecttohost(ADDRESS.c_str());
+  // audio.connecttohost(ADDRESS.c_str());
     
     
 }
@@ -117,6 +126,11 @@ void loop() {
     sprintf(buffer, "%02d:%02d", t/60000UL/60UL, t/60000UL - t/60000UL/60UL * 60);
     printLCD(buffer);
   }
+
+ if(budzik && godz_budz == t/60000UL/60UL && min_budz == t/60000UL - t/60000UL/60UL * 60){
+   audio.connecttohost(ADDRESS.c_str());
+   budzik = false;
+ }
     
   // Obsługa przychodzących połączeń
   server.handleClient();
